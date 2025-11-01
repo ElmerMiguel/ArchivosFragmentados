@@ -4,40 +4,44 @@ import archivosfragmentados.model.Entidad;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Servicio especializado en el manejo de datos CSV.
- * Omite la primera línea de CADA ARCHIVO individualmente.
+ * Las cabeceras ya fueron omitidas en el LectorArchivos.
  */
 public class ManejadorCSV {
     
+    private static final String CABECERA_ESTANDAR = "ID,Nombre,Ciudad";
+    
     /**
-     * Procesa las entidades y omite la primera línea de cada una.
+     * Unifica los datos de las entidades (las cabeceras ya fueron omitidas).
      * 
-     * @param entidades Mapa de entidades leídas
-     * @return Lista de datos sin cabeceras y sin líneas vacías
+     * @param entidades Mapa de entidades leídas (sin cabeceras)
+     * @return Lista de datos unificados
      */
-    public List<String> procesarCabeceras(Map<String, Entidad> entidades) {
-        List<String> todosSinCabeceras = new ArrayList<>();
+    public List<String> procesarDatos(Map<String, Entidad> entidades) {
+        List<String> datosUnificados = new ArrayList<>();
         
         for (Entidad entidad : entidades.values()) {
-            List<String> lineasEntidad = entidad.getLineasDatos();
-            
-            if (!lineasEntidad.isEmpty()) {
-                // Mostrar la primera línea que se omitirá
-                System.out.println("PRIMERA LINEA OMITIDA DE " + entidad.getNombre() + ": " + lineasEntidad.get(0));
-                
-                // Omitir la primera línea y agregar el resto (filtrando vacías)
-                List<String> sinPrimera = lineasEntidad.stream()
-                    .skip(1)
-                    .filter(linea -> !linea.trim().isEmpty())
-                    .collect(Collectors.toList());
-                
-                todosSinCabeceras.addAll(sinPrimera);
-            }
+            datosUnificados.addAll(entidad.getLineasDatos());
         }
         
-        return todosSinCabeceras;
+        return datosUnificados;
+    }
+    
+    /**
+     * Prepara los datos finales CON cabecera para el archivo de salida.
+     * 
+     * @param datosSinDuplicados Lista de datos procesados
+     * @return Lista con cabecera al inicio
+     */
+    public List<String> prepararArchivoFinal(List<String> datosSinDuplicados) {
+        List<String> datosFinales = new ArrayList<>();
+        datosFinales.add(CABECERA_ESTANDAR);
+        datosFinales.addAll(datosSinDuplicados);
+        
+        // System.out.println("CABECERA AGREGADA AL ARCHIVO FINAL: " + CABECERA_ESTANDAR);
+        
+        return datosFinales;
     }
 }

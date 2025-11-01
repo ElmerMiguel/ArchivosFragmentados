@@ -40,13 +40,12 @@ public class LectorArchivos {
         System.out.println("Archivos CSV encontrados: " + archivosCsv.size());
         
         for (Path archivo : archivosCsv) {
-    // Omitir el archivo "entidad_rec.csv"
-    if (archivo.getFileName().toString().equalsIgnoreCase("entidad_rec.csv")) {
-        System.out.println("Archivo omitido: " + archivo.getFileName());
-        continue;
-    }
-    procesarArchivoFragmentado(archivo, entidades);
-}
+            if (archivo.getFileName().toString().equalsIgnoreCase("entidad_rec.csv")) {
+                System.out.println("Archivo omitido: " + archivo.getFileName());
+                continue;
+            }
+            procesarArchivoFragmentado(archivo, entidades);
+        }
         
         return entidades;
     }
@@ -71,7 +70,7 @@ public class LectorArchivos {
     }
     
     /**
-     * Procesa un archivo fragmentado individual.
+     * Procesa un archivo fragmentado individual OMITIENDO LA PRIMERA LÍNEA.
      * 
      * @param archivo Archivo a procesar
      * @param entidades Mapa de entidades donde almacenar los datos
@@ -89,9 +88,19 @@ public class LectorArchivos {
         Entidad entidad = entidades.computeIfAbsent(nombreEntidad, Entidad::new);
         
         try (BufferedReader reader = Files.newBufferedReader(archivo, StandardCharsets.UTF_8)) {
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                entidad.agregarLineaDatos(linea);
+            String primeraLinea = reader.readLine(); // Leer primera línea
+            
+            if (primeraLinea != null) {
+                // Mostrar la cabecera omitida
+               // System.out.println("CABECERA OMITIDA DE " + nombreArchivo + ": " + primeraLinea);
+                
+                // Leer el resto de líneas (datos reales)
+                String linea;
+                while ((linea = reader.readLine()) != null) {
+                    if (!linea.trim().isEmpty()) {
+                        entidad.agregarLineaDatos(linea);
+                    }
+                }
             }
         }
         

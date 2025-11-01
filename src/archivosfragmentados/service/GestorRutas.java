@@ -82,7 +82,6 @@ public class GestorRutas {
             nombreArchivo += ".csv";
         }
         
-        // IMPORTANTE: Generar archivo en la RAIZ del programa, NO en la carpeta CSV
         Path directorioRaiz = obtenerDirectorioEjecucion();
         Path archivoCompleto = directorioRaiz.resolve(nombreArchivo);
         

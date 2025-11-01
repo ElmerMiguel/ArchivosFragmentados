@@ -42,6 +42,7 @@ public class ProcesadorDatos {
             visualizador.mostrarSeparador();
             System.out.println("PROCESANDO ARCHIVOS SELECCIONADOS...");
             
+            // Las cabeceras ya fueron omitidas en el LectorArchivos
             Map<String, Entidad> entidades = lector.leerArchivosSeleccionados(archivosSeleccionados);
             
             if (entidades.isEmpty()) {
@@ -49,24 +50,28 @@ public class ProcesadorDatos {
                 return;
             }
             
-            // CAMBIO IMPORTANTE: Procesar cabeceras desde las entidades, no desde lista unificada
-            List<String> datosSinCabeceras = manejadorCSV.procesarCabeceras(entidades);
+            // Unificar datos (ya sin cabeceras)
+            List<String> datosUnificados = manejadorCSV.procesarDatos(entidades);
             
             visualizador.mostrarResumenDetallado(entidades);
             
-            AnalizadorDatos.ResultadoAnalisis resultado = analizador.analizarYEliminarDuplicados(datosSinCabeceras);
+            AnalizadorDatos.ResultadoAnalisis resultado = analizador.analizarYEliminarDuplicados(datosUnificados);
             
             visualizador.mostrarAnalisisDuplicados(resultado);
             
-            Path archivoSalida = gestorRutas.obtenerArchivoSalida();
-            escritor.escribirArchivo(archivoSalida, resultado.getDatosSinDuplicados());
+            // Preparar archivo final CON cabecera
+            List<String> archivoFinal = manejadorCSV.prepararArchivoFinal(resultado.getDatosSinDuplicados());
             
-            visualizador.mostrarResultadoFinal(archivoSalida, datosSinCabeceras.size(), 
+            Path archivoSalida = gestorRutas.obtenerArchivoSalida();
+            escritor.escribirArchivo(archivoSalida, archivoFinal);
+            
+            // Mostrar estadísticas correctas (sin contar cabeceras)
+            visualizador.mostrarResultadoFinal(archivoSalida, datosUnificados.size(), 
                                              resultado.getDatosSinDuplicados().size(), 
                                              resultado.getDuplicados().size());
             
             if (gestorRutas.mostrarContenidoFinal()) {
-                visualizador.mostrarContenidoArchivo(resultado.getDatosSinDuplicados());
+                visualizador.mostrarContenidoArchivo(archivoFinal); // Mostrar con cabecera
             }
             
         } catch (IOException e) {

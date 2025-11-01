@@ -105,13 +105,11 @@ public class SelectorArchivos {
             System.out.print("\nSeleccion: ");
             String seleccion = scanner.nextLine().trim();
             
-            // Si presiona Enter (cadena vacía), seleccionar todos
             if (seleccion.isEmpty()) {
                 System.out.println("Seleccionados TODOS los archivos (" + archivosDisponibles.size() + ")");
                 return archivosDisponibles;
             }
             
-            // Si escribe "todos" explícitamente
             if (seleccion.toLowerCase().equals("todos")) {
                 System.out.println("Seleccionados todos los archivos (" + archivosDisponibles.size() + ")");
                 return archivosDisponibles;
@@ -142,7 +140,6 @@ public class SelectorArchivos {
         List<Path> seleccionados = new ArrayList<>();
         
         if (seleccion.contains("-")) {
-            // Manejo de rangos (ej: 1-5)
             String[] partes = seleccion.split("-");
             if (partes.length == 2) {
                 int inicio = Integer.parseInt(partes[0].trim()) - 1;
@@ -153,7 +150,6 @@ public class SelectorArchivos {
                 }
             }
         } else {
-            // Manejo de numeros separados por comas
             String[] numeros = seleccion.split(",");
             for (String numero : numeros) {
                 int indice = Integer.parseInt(numero.trim()) - 1;

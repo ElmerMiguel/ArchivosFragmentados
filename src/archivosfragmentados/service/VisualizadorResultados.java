@@ -51,7 +51,7 @@ public class VisualizadorResultados {
         }
         
         System.out.println("-".repeat(64));
-        System.out.printf("TOTAL: %d entidades con %d lineas%n", entidades.size(), totalLineas);
+        //System.out.printf("TOTAL: %d entidades con %d lineas%n", entidades.size(), totalLineas);
     }
     
     /**

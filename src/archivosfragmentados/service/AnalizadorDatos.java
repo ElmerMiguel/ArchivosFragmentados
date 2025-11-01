@@ -35,7 +35,6 @@ public class AnalizadorDatos {
         Map<String, Integer> conteoLineas = new LinkedHashMap<>();
         List<String> duplicados = new ArrayList<>();
         
-        // Contar ocurrencias
         for (String linea : datos) {
             if (!linea.trim().isEmpty()) {
                 int count = conteoLineas.getOrDefault(linea, 0) + 1;
@@ -47,7 +46,6 @@ public class AnalizadorDatos {
             }
         }
         
-        // Eliminar duplicados preservando orden
         List<String> datosSinDuplicados = datos.stream()
                 .filter(linea -> !linea.trim().isEmpty())
                 .distinct()
