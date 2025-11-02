@@ -17,6 +17,7 @@ import java.util.Map;
 public class LectorArchivos {
     
     private final ValidadorArchivos validador;
+    private String cabeceraDetectada = null;
     
     public LectorArchivos() {
         this.validador = new ValidadorArchivos();
@@ -36,6 +37,7 @@ public class LectorArchivos {
         
         Map<String, Entidad> entidades = new HashMap<>();
         List<Path> archivosCsv = validador.obtenerArchivosCsv(directorio);
+        this.cabeceraDetectada = null; 
         
         System.out.println("Archivos CSV encontrados: " + archivosCsv.size());
         
@@ -59,6 +61,7 @@ public class LectorArchivos {
      */
     public Map<String, Entidad> leerArchivosSeleccionados(List<Path> archivosSeleccionados) throws IOException {
         Map<String, Entidad> entidades = new HashMap<>();
+        this.cabeceraDetectada = null;
         
         System.out.println("Procesando " + archivosSeleccionados.size() + " archivos seleccionados...");
         
@@ -70,7 +73,17 @@ public class LectorArchivos {
     }
     
     /**
+     * Obtiene la cabecera detectada del primer archivo procesado.
+     * 
+     * @return Cabecera detectada o null si no se encontro ninguna
+     */
+    public String getCabeceraDetectada() {
+        return cabeceraDetectada;
+    }
+    
+    /**
      * Procesa un archivo fragmentado individual OMITIENDO LA PRIMERA LÍNEA.
+     * Captura la cabecera del primer archivo para uso posterior.
      * 
      * @param archivo Archivo a procesar
      * @param entidades Mapa de entidades donde almacenar los datos
@@ -88,13 +101,16 @@ public class LectorArchivos {
         Entidad entidad = entidades.computeIfAbsent(nombreEntidad, Entidad::new);
         
         try (BufferedReader reader = Files.newBufferedReader(archivo, StandardCharsets.UTF_8)) {
-            String primeraLinea = reader.readLine(); // Leer primera línea
+            String primeraLinea = reader.readLine(); 
             
             if (primeraLinea != null) {
-                // Mostrar la cabecera omitida
-               // System.out.println("CABECERA OMITIDA DE " + nombreArchivo + ": " + primeraLinea);
+                if (cabeceraDetectada == null) {
+                    cabeceraDetectada = primeraLinea.trim();
+                    System.out.println("CABECERA DETECTADA PARA ARCHIVO FINAL: " + cabeceraDetectada);
+                }
                 
-                // Leer el resto de líneas (datos reales)
+                System.out.println("CABECERA OMITIDA DE " + nombreArchivo + ": " + primeraLinea);
+                
                 String linea;
                 while ((linea = reader.readLine()) != null) {
                     if (!linea.trim().isEmpty()) {

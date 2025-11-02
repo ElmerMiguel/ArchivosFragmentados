@@ -1,26 +1,98 @@
-# **ARCHIVOS FRAGMENTADOS**
+# 🗂️ Procesador de Archivos Fragmentados.
 
-## **Objetivo General**
+Este proyecto permite reconstruir archivos CSV fragmentados, eliminando duplicados y unificando su contenido en un archivo maestro. Es ideal para recuperar registros dispersos en múltiples archivos parciales.
 
-Desarrollar un programa que lea múltiples archivos de texto fragmentados, los combine en un solo archivo maestro y procese su contenido eliminando duplicados y ordenando los datos.
+---
 
-## **Competencias a Desarrollar**
+## 🚀 Ejecución del Programa
 
-* Lectura y escritura de archivos secuenciales.  
-* Manejo de listas y estructuras de datos.  
-* Uso de rutas y directorios.  
-* Limpieza de información.
+Para ejecutar el programa, abre una terminal y navega al directorio [`01_jar`](./01_jar). Luego ejecuta:
 
-## **Descripción del problema**
+```bash
+java -jar ArchivosFragmentados.jar
+```
 
-Una empresa pierde todos sus archivos de registro principales, pero aún conserva varias copias parciales de los mismos, cada copia empieza con el nombre de la entidad que guarda, seguido de un guión bajo y luego un número que indica la secuencia en la que va, por ejemplo: entidad\_1.csv, entidad\_2.csv. Cada archivo contiene líneas con los datos de esa entidad, su tarea es reconstruir el archivo completo y eliminar duplicados.
+---
 
-## **Requerimientos del programa:**
+## 🧠 Funcionamiento
 
-* Lectura de archivos: El programa debe leer todos los archivos .csv del directorio especificado.  
-* Lista de entidades: El programa debe listar todas las entidades presentes en ese directorio.  
-* Unificación de datos: Combinar todo el contenido en una lista única.  
-* Eliminación de duplicados: No deben repetirse las líneas en el archivo final.  
-* Archivo de salida: Guardar el resultado en un archivo “entidad\_rec.csv”.
+Al iniciar, el programa busca automáticamente archivos `.csv` dentro de la carpeta `csv/` ubicada junto al `.jar`. Si encuentra archivos, te preguntará si deseas usarlos. Si no hay archivos en esa carpeta, solicitará una ruta alternativa.
 
-# 
+### Ejemplo de ejecución:
+
+```
+================================================================
+           PROCESADOR DE ARCHIVOS FRAGMENTADOS v1.0           
+================================================================
+Este programa reconstruye archivos fragmentados eliminando
+duplicados y unificando el contenido en un archivo maestro.
+================================================================
+DIRECTORIO ENCONTRADO: /ruta/proyecto/01_jar/csv
+Se encontraron 3 archivos CSV en el directorio.
+Desea usar este directorio? (S/n): 
+```
+
+---
+
+## 📂 Selección de Archivos
+
+Puedes elegir:
+
+- Todos los archivos (presionando Enter)
+- Archivos específicos: `1,3`
+- Rango de archivos: `1-3`
+
+---
+
+## ⚙️ Proceso de Reconstrucción
+
+1. Se detecta la cabecera común.
+2. Se omiten cabeceras duplicadas.
+3. Se identifican entidades por nombre de archivo.
+4. Se eliminan líneas duplicadas.
+5. Se genera un archivo final con los datos unificados.
+
+---
+
+## 📊 Ejemplo de Resumen
+
+```
+================================================================
+RESUMEN DE ENTIDADES ENCONTRADAS
+================================================================
+ENTIDAD              ARCHIVOS        LINEAS TOTALES      
+----------------------------------------------------------------
+entidad              Multiples       9                   
+----------------------------------------------------------------
+
+================================================================
+ANALISIS DE DUPLICADOS
+================================================================
+Se encontraron 2 lineas duplicadas:
+...
+```
+
+---
+
+## 📁 Archivo de Salida
+
+El archivo final se guarda en la raíz del proyecto como `entidad_rec.csv`, a menos que se indique otro nombre.
+
+```
+Archivo generado: entidad_rec.csv
+Ubicación: 01_jar/entidad_rec.csv
+```
+
+---
+
+## ✅ Requisitos
+
+- Java instalado.
+- Archivos `.csv` con estructura consistente.
+
+---
+
+## 📌 Notas
+
+- Los archivos deben tener nombres con el formato `entidad_1.csv`, `entidad_2.csv`, etc.
+- La cabecera debe ser idéntica en todos los archivos.

@@ -26,7 +26,6 @@ public class ValidadorArchivos {
     return Files.list(directorio)
             .filter(Files::isRegularFile)
             .filter(archivo -> archivo.toString().toLowerCase().endsWith(".csv"))
-            // Excluir "entidad_rec.csv"
             .filter(archivo -> !archivo.getFileName().toString().equalsIgnoreCase("entidad_rec.csv"))
             .collect(Collectors.toList());
 }

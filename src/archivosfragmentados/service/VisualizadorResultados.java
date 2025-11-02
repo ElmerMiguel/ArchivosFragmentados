@@ -51,7 +51,6 @@ public class VisualizadorResultados {
         }
         
         System.out.println("-".repeat(64));
-        //System.out.printf("TOTAL: %d entidades con %d lineas%n", entidades.size(), totalLineas);
     }
     
     /**
@@ -94,24 +93,25 @@ public class VisualizadorResultados {
      * @param lineasFinales Numero de lineas finales
      * @param duplicadosEliminados Numero de duplicados eliminados
      */
-    public void mostrarResultadoFinal(Path archivoSalida, int lineasOriginales, 
-                                     int lineasFinales, int duplicadosEliminados) {
-        mostrarSeparador();
-        System.out.println("PROCESAMIENTO COMPLETADO EXITOSAMENTE");
-        mostrarSeparador();
-        
-        System.out.printf("Lineas procesadas:      %d%n", lineasOriginales);
-        System.out.printf("Duplicados eliminados:  %d%n", duplicadosEliminados);
-        System.out.printf("Lineas finales:         %d%n", lineasFinales);
-        
-        double porcentajeReduccion = duplicadosEliminados > 0 ? 
-            (duplicadosEliminados * 100.0 / lineasOriginales) : 0.0;
-        System.out.printf("Reduccion de datos:     %.1f%%%n", porcentajeReduccion);
-        
-        System.out.println();
-        System.out.println("Archivo generado: " + archivoSalida.getFileName());
-        System.out.println("Ubicacion: " + archivoSalida.toAbsolutePath());
-    }
+
+public void mostrarResultadoFinal(Path archivoSalida, int lineasOriginales, 
+                                 int lineasFinales, int duplicadosEliminados) {
+    mostrarSeparador();
+    System.out.println("PROCESAMIENTO COMPLETADO EXITOSAMENTE");
+    mostrarSeparador();
+    
+    System.out.printf("Lineas procesadas:      %d%n", lineasOriginales);
+    System.out.printf("Duplicados eliminados:  %d%n", duplicadosEliminados);
+    System.out.printf("Lineas finales:         %d%n", lineasFinales);
+    
+    double porcentajeReduccion = duplicadosEliminados > 0 ? 
+        (duplicadosEliminados * 100.0 / lineasOriginales) : 0.0;
+    System.out.printf("Reduccion de datos:     %.1f%%%n", porcentajeReduccion);
+    
+    System.out.println();
+    System.out.println("Archivo generado: " + archivoSalida.getFileName());
+    System.out.println("Ubicacion: " + archivoSalida.toAbsolutePath());
+}
     
     /**
      * Muestra el contenido del archivo final generado.

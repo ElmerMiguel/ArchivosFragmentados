@@ -2,8 +2,8 @@ package archivosfragmentados.service;
 
 import archivosfragmentados.model.Entidad;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,10 +26,10 @@ public class AnalizadorDatos {
     }
     
     /**
-     * Analiza duplicados y elimina repeticiones.
+     * Analiza duplicados, elimina repeticiones y ORDENA los datos.
      * 
      * @param datos Lista de datos originales
-     * @return Resultado del analisis con datos procesados
+     * @return Resultado del analisis con datos procesados y ordenados
      */
     public ResultadoAnalisis analizarYEliminarDuplicados(List<String> datos) {
         Map<String, Integer> conteoLineas = new LinkedHashMap<>();
@@ -49,6 +49,7 @@ public class AnalizadorDatos {
         List<String> datosSinDuplicados = datos.stream()
                 .filter(linea -> !linea.trim().isEmpty())
                 .distinct()
+                .sorted() 
                 .collect(Collectors.toCollection(ArrayList::new));
         
         return new ResultadoAnalisis(datosSinDuplicados, duplicados, conteoLineas);

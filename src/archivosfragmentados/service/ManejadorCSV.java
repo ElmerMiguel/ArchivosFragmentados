@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Servicio especializado en el manejo de datos CSV.
- * Las cabeceras ya fueron omitidas en el LectorArchivos.
+ * Servicio especializado en el manejo de datos CSV completamente dinámico.
  */
 public class ManejadorCSV {
     
-    private static final String CABECERA_ESTANDAR = "ID,Nombre,Ciudad";
+    private String cabeceraDetectada = null;
     
     /**
      * Unifica los datos de las entidades (las cabeceras ya fueron omitidas).
@@ -30,18 +29,43 @@ public class ManejadorCSV {
     }
     
     /**
-     * Prepara los datos finales CON cabecera para el archivo de salida.
+     * Establece la cabecera detectada del primer archivo procesado.
+     * 
+     * @param cabecera Cabecera detectada
+     */
+    public void establecerCabecera(String cabecera) {
+        if (this.cabeceraDetectada == null && cabecera != null && !cabecera.trim().isEmpty()) {
+            this.cabeceraDetectada = cabecera.trim();
+            System.out.println("CABECERA DETECTADA PARA ARCHIVO FINAL: " + this.cabeceraDetectada);
+        }
+    }
+    
+    /**
+     * Prepara los datos finales CON la cabecera detectada dinámicamente.
      * 
      * @param datosSinDuplicados Lista de datos procesados
-     * @return Lista con cabecera al inicio
+     * @return Lista con cabecera dinámica al inicio
      */
     public List<String> prepararArchivoFinal(List<String> datosSinDuplicados) {
         List<String> datosFinales = new ArrayList<>();
-        datosFinales.add(CABECERA_ESTANDAR);
+        
+        if (cabeceraDetectada != null) {
+            datosFinales.add(cabeceraDetectada);
+        } else {
+            System.out.println("ADVERTENCIA: No se detectó cabecera. Archivo sin cabecera.");
+        }
+        
         datosFinales.addAll(datosSinDuplicados);
         
-        // System.out.println("CABECERA AGREGADA AL ARCHIVO FINAL: " + CABECERA_ESTANDAR);
-        
         return datosFinales;
+    }
+    
+    /**
+     * Obtiene la cabecera detectada.
+     * 
+     * @return Cabecera detectada o null
+     */
+    public String getCabeceraDetectada() {
+        return cabeceraDetectada;
     }
 }

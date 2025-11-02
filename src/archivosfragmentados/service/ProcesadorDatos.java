@@ -42,16 +42,16 @@ public class ProcesadorDatos {
             visualizador.mostrarSeparador();
             System.out.println("PROCESANDO ARCHIVOS SELECCIONADOS...");
             
-            // Las cabeceras ya fueron omitidas en el LectorArchivos
             Map<String, Entidad> entidades = lector.leerArchivosSeleccionados(archivosSeleccionados);
-            
-            if (entidades.isEmpty()) {
-                System.out.println("No se pudieron procesar los archivos seleccionados.");
-                return;
-            }
-            
-            // Unificar datos (ya sin cabeceras)
-            List<String> datosUnificados = manejadorCSV.procesarDatos(entidades);
+
+if (entidades.isEmpty()) {
+    System.out.println("No se pudieron procesar los archivos seleccionados.");
+    return;
+}
+
+manejadorCSV.establecerCabecera(lector.getCabeceraDetectada());
+
+List<String> datosUnificados = manejadorCSV.procesarDatos(entidades);
             
             visualizador.mostrarResumenDetallado(entidades);
             
@@ -59,19 +59,17 @@ public class ProcesadorDatos {
             
             visualizador.mostrarAnalisisDuplicados(resultado);
             
-            // Preparar archivo final CON cabecera
             List<String> archivoFinal = manejadorCSV.prepararArchivoFinal(resultado.getDatosSinDuplicados());
             
             Path archivoSalida = gestorRutas.obtenerArchivoSalida();
             escritor.escribirArchivo(archivoSalida, archivoFinal);
             
-            // Mostrar estadísticas correctas (sin contar cabeceras)
             visualizador.mostrarResultadoFinal(archivoSalida, datosUnificados.size(), 
                                              resultado.getDatosSinDuplicados().size(), 
                                              resultado.getDuplicados().size());
             
             if (gestorRutas.mostrarContenidoFinal()) {
-                visualizador.mostrarContenidoArchivo(archivoFinal); // Mostrar con cabecera
+                visualizador.mostrarContenidoArchivo(archivoFinal); 
             }
             
         } catch (IOException e) {
